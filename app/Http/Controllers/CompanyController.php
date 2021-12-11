@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Company;
+use App\Models\Display;
+use App\Http\Requests\CrearCompanyRequest;
 
 class CompanyController extends Controller
 {
@@ -13,7 +15,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return Company::all();
     }
 
     /**
@@ -22,9 +24,13 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CrearCompanyRequest $request)
     {
-        //
+        Company::create($request->all());
+        return response()->json([
+            'response' => true,
+            'message' => 'Empresa creada correctamente!'
+        ], 200);
     }
 
     /**
@@ -35,7 +41,11 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
+        $company = Company::findOrFail($id);
+        return response()->json([
+            'response' => true,
+            'company' => $company
+        ], 200);
     }
 
     /**
@@ -45,9 +55,14 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CrearCompanyRequest $request, $id)
     {
-        //
+        $company = Company::findOrFail($id);
+        $company->update($request->all());
+        return response()->json([
+            'response' => true,
+            'message' => 'Empresa Actualizada correctamente!'
+        ], 200);
     }
 
     /**
@@ -58,6 +73,34 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $displays = Display::where('company_id', $id)->get();
+        if(count($displays) == 0){
+            $company = Company::findOrFail($id);
+            $company->delete();
+            return response()->json([
+                'response' => true,
+                'message' => 'Empresa Eliminada correctamente!'
+            ], 200);
+        }else{
+            return response()->json([
+                'response' => true,
+                'message' => 'Esta empresa tiene pantallas, primero eliminelas!'
+            ], 500);
+        }
+    }
+
+    /**
+     * get all displays for a company.
+     *
+     * @param  int  $company_id
+     * @return \Illuminate\Http\Response
+     */
+    public function getDisplays($company_id)
+    {
+        $displays = Display::where('company_id', $company_id)->get();
+        return response()->json([
+            'response' => true,
+            'displays' => $displays 
+        ], 200);
     }
 }

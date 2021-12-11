@@ -13,10 +13,11 @@ class CreateDisplayTable extends Migration
      */
     public function up()
     {
-        Schema::create('display', function (Blueprint $table) {
+        Schema::create('displays', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('company_id');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references("id")->on("companies");
             $table->decimal('latitude');
             $table->decimal('longitude');
             $table->enum('type',['indoor','outdoor']);

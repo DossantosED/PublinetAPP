@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Display;
+use App\Http\Requests\CrearDisplayRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class DisplayController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    * Display a listing of the resource.
+    * @param $country
+    * @return \Illuminate\Http\Response
+    */
+    public function index(Request $country = null)
     {
-        //
+        if($country){
+            return DB::table('displays')
+            ->join('companies', 'displays.company_id', '=', 'companies.id')
+            ->where('companies.country', $country)->get();
+        }else{
+            return Display::all();
+        }
     }
 
     /**
@@ -22,9 +31,13 @@ class DisplayController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CrearDisplayRequest $request)
     {
-        //
+        Display::create($request->all());
+        return response()->json([
+            'response' => true,
+            'message' => 'Pantalla creada correctamente!'
+        ], 200);
     }
 
     /**
@@ -35,7 +48,11 @@ class DisplayController extends Controller
      */
     public function show($id)
     {
-        //
+        $display = Display::findOrFail($id);
+        return response()->json([
+            'response' => true,
+            'display' => $display
+        ], 200);
     }
 
     /**
@@ -45,9 +62,14 @@ class DisplayController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CrearDisplayRequest $request, $id)
     {
-        //
+        $display = Display::findOrFail($id);
+        $display->update($request->all());
+        return response()->json([
+            'response' => true,
+            'message' => 'Pantalla Actualizada correctamente!'
+        ], 200);
     }
 
     /**
@@ -58,6 +80,11 @@ class DisplayController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $display = Display::findOrFail($id);
+        $display->delete();
+        return response()->json([
+            'response' => true,
+            'message' => 'Pantalla Eliminada correctamente!'
+        ], 200);
     }
 }
