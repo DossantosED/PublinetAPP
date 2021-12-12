@@ -42,8 +42,9 @@ class CrearDisplayRequest extends FormRequest
     {
         return [
             "required" => "Este campo es requerido",
-            "integer" => "El campo debe ser un valor entero",
-            "numeric" => "El campo debe ser un valor numerico"
+            "integer" => "El campo es requerido",
+            "numeric" => "El campo debe ser un valor numerico",
+            "type" => "Seleccione un tipo"
 
         ];  
     }
