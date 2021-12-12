@@ -26,8 +26,8 @@ class CompanyController extends Controller
      */
     public function store(CrearCompanyRequest $request)
     {
-        $company = Company::where('name', '=', $request->input()["name"])->firstOrFail();    
-        if($company){
+        $company = Company::where('name', '=', $request->input()["name"])->get();    
+        if(count($company) > 0){
             return response()->json([
                 'response' => false,
                 'message' => 'Esta empresa ya existe'
