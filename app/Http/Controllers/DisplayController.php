@@ -11,12 +11,13 @@ class DisplayController extends Controller
 {
     /**
     * Display a listing of the resource.
-    * @param $country
+    * @param $request
     * @return \Illuminate\Http\Response
     */
-    public function index(Request $country = null)
+    public function index(Request $request)
     {
-        if($country){
+        if(!empty($request->input())){
+            $country = $request->input()["country"];
             return DB::table('displays')
             ->join('companies', 'displays.company_id', '=', 'companies.id')
             ->where('companies.country', $country)->get();
