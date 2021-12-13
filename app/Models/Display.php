@@ -15,6 +15,7 @@ class Display extends Model
         'latitude',
         'longitude',
         'type',
+        'image',
         'price'
     ];
 }

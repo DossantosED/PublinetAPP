@@ -24,7 +24,7 @@ class CrearDisplayRequest extends FormRequest
      */
     public function rules()
     {
-        $decimal = "required|numeric|between:0,99.99";
+        $decimal = "required|numeric|between:0,999.999";
         return [
             "name" => "required",
             "company_id" => "integer|required",

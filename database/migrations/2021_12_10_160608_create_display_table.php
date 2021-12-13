@@ -20,6 +20,7 @@ class CreateDisplayTable extends Migration
             $table->foreign('company_id')->references("id")->on("companies");
             $table->decimal('latitude');
             $table->decimal('longitude');
+            $table->string('image');
             $table->enum('type',['indoor','outdoor']);
             $table->decimal('price');
         });

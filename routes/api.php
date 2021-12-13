@@ -34,3 +34,6 @@ Route::put('displays/{display_id}', [DisplayController::class,'update']);
 Route::get('displays', [DisplayController::class,'index']);
 Route::get('displays/{display_id}', [DisplayController::class,'show']);
 Route::delete('displays/{displays_id}', [DisplayController::class,'destroy']);
+
+Route::post('updateimage/{displays_id}', [DisplayController::class,'updateImage']);
+
