@@ -34,6 +34,15 @@ class DisplayController extends Controller
      */
     public function store(CrearDisplayRequest $request)
     {
+        if($request->hasFile('file')){
+            if($_FILES["file"]["size"] > 50000000){
+                return response()->json(['response' => true, 'message' => 'La imagen supera los 5 MBs'],500);
+            }
+            if($_FILES["file"]["type"] != "image/jpeg" && $_FILES["file"]["type"] != "image/jpg" && $_FILES["file"]["type"] != "image/png"){
+                return response()->json(['exiresponseto' => true, 'message' => 'El archivo no es una imagen'],500);
+            }
+            $request->file('file')->move(public_path('/images/displays'), $_FILES["file"]["name"]); 
+        }
         Display::create($request->all());
         return response()->json([
             'response' => true,
@@ -86,6 +95,25 @@ class DisplayController extends Controller
         return response()->json([
             'response' => true,
             'message' => 'Pantalla Eliminada correctamente!'
+        ], 200);
+    }
+
+    public function updateImage(Request $request, $id){
+        if($request->hasFile('file')){
+            if($_FILES["file"]["size"] > 50000000){
+                return response()->json(['response' => true, 'message' => 'La imagen supera los 5 MBs'],500);
+            }
+            if($_FILES["file"]["type"] != "image/jpeg" && $_FILES["file"]["type"] != "image/jpg" && $_FILES["file"]["type"] != "image/png"){
+                return response()->json(['exiresponseto' => true, 'message' => 'El archivo no es una imagen'],500);
+            }
+            $request->file('file')->move(public_path('/images/displays'), $_FILES["file"]["name"]); 
+        }
+        $display = Display::findOrFail($id);
+        $display->image = $_FILES["file"]["name"];
+        $display->save();
+        return response()->json([
+            'response' => true,
+            'message' => 'Imagen Actualizada correctamente!'
         ], 200);
     }
 }
